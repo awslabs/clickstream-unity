@@ -1,6 +1,6 @@
 namespace ClickstreamAnalytics.Provider
 {
-    public static class Event
+    internal static class Event
     {
         public static class Constants
         {

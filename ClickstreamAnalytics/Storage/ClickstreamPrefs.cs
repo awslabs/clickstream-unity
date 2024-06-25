@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ClickstreamAnalytics.Storage
 {
-    public static class ClickstreamPrefs
+    internal static class ClickstreamPrefs
     {
         public const string KeyPrefix = "aws-solution/clickstream-unity/";
 

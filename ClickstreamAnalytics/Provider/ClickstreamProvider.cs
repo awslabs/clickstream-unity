@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using ClickstreamAnalytics.Storage;
 using ClickstreamAnalytics.Util;
 using UnityEngine;
 
@@ -12,6 +10,8 @@ namespace ClickstreamAnalytics.Provider
         private ClickstreamConfiguration _configuration;
         private ClickstreamContext _context;
         private EventRecorder _eventRecorder;
+        private readonly Dictionary<string, object> _userAttributes = new();
+        private readonly Dictionary<string, object> _globalAttributes = new();
 
         public void Configure(ClickstreamConfiguration config)
         {
@@ -30,27 +30,32 @@ namespace ClickstreamAnalytics.Provider
                 ClickstreamLog.Error("Event name is invalid");
                 return;
             }
-            attributes ??= new Dictionary<string, object>();
 
-            var now = DateTimeOffset.UtcNow;
-            var timestamp = now.ToUnixTimeMilliseconds();
+            var eventDictionary = EventBuilder.CreatedEvent(_context, eventName, attributes,
+                _userAttributes,
+                _globalAttributes
+            );
 
-            var data = new Dictionary<string, object>
+            _eventRecorder.RecordEvents(eventDictionary);
+        }
+
+        public void SetUserAttributes(Dictionary<string, object> userAttributes)
+        {
+            var timestamp = ClickstreamDate.GetCurrentTimestamp();
+            foreach (var kvp in userAttributes)
             {
-                { "event_type", eventName },
-                { "event_id", Guid.NewGuid().ToString() },
-                { "time_stamp", timestamp },
-                { "device_id", Guid.NewGuid().ToString() },
-                { "unique_id", _context.UserUniqueId },
-                { "attributes", attributes }
-            };
+                var userObject = new Dictionary<string, object>
+                    { { "value", kvp.Value }, { "set_timestamp", timestamp } };
+                _userAttributes[kvp.Key] = userObject;
+            }
+        }
 
-            var eventJson = ClickstreamJson.Serialize(data);
-            var saveResult = ClickstreamEventStorage.SaveEvent(eventJson);
-            ClickstreamLog.Debug(eventJson);
-            if (saveResult) return;
-            ClickstreamLog.Info("Cache Capacity Reached, Sending Event Immediately");
-            _eventRecorder.StartSendEvents(Event.Constants.Prefix + eventJson + Event.Constants.Suffix);
+        public void SetGlobalAttributes(Dictionary<string, object> globalAttributes)
+        {
+            foreach (var kvp in globalAttributes)
+            {
+                _globalAttributes[kvp.Key] = kvp.Value;
+            }
         }
 
         private IEnumerator StartTimer()

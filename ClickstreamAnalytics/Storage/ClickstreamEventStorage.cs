@@ -3,7 +3,7 @@ using ClickstreamAnalytics.Provider;
 
 namespace ClickstreamAnalytics.Storage
 {
-    public static class ClickstreamEventStorage
+    internal static class ClickstreamEventStorage
     {
         private const string EventKey = ClickstreamPrefs.KeyPrefix + "eventsKey";
         private const int MaxLength = 1024 * 1024;

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ClickstreamAnalytics.Util
 {
-    public static class ClickstreamCompress
+    internal static class ClickstreamCompress
     {
         public static string Gzip(string rawStr)
         {

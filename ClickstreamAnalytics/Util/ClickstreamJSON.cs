@@ -12,7 +12,6 @@ using System.Globalization;
 namespace ClickstreamAnalytics.Util
 {
     /* Based on the JSON parser from
-     * http://techblog.procurios.nl/k/618/news/view/14605/14863/How-do-I-write-my-own-parser-for-JSON.html
      *
      * I simplified it so that it doesn't throw exceptions
      * and can be used in Unity iPhone with maximum code stripping.
@@ -24,7 +23,7 @@ namespace ClickstreamAnalytics.Util
     /// JSON uses Arrays and Objects. These correspond here two the datatypes ArrayList and Hashtable.
     /// All numbers are parsed to floats.
     /// </summary>
-    public static class ClickstreamJson
+    internal static class ClickstreamJson
     {
         /// <summary>
         /// Converts a IDictionary / IList object or a simple type (string, int, etc.) into a JSON string

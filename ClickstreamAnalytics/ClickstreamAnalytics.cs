@@ -29,6 +29,16 @@ namespace ClickstreamAnalytics
             _provider.Record(name, attributes);
         }
 
+        public static void SetUserAttributes(Dictionary<string, object> userAttributes)
+        {
+            _provider.SetUserAttributes(userAttributes);
+        }
+
+        public static void SetGlobalAttributes(Dictionary<string, object> globalAttributes)
+        {
+            _provider.SetGlobalAttributes(globalAttributes);
+        }
+
         public static void FlushEvents()
         {
             _provider.FlushEvents();
@@ -39,8 +49,8 @@ namespace ClickstreamAnalytics
     {
         public string AppId { get; set; }
         public string Endpoint { get; set; }
-        public bool IsLogEvents { get; set; } = false;
-
+        public bool IsLogEvents { get; set; }
+        public bool IsCompressEvents { get; set; } = true;
         public int SendEventsInterval { get; set; } = 5000;
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ClickstreamAnalytics.Network;
 using ClickstreamAnalytics.Storage;
 using ClickstreamAnalytics.Util;
@@ -5,7 +6,7 @@ using UnityEngine;
 
 namespace ClickstreamAnalytics.Provider
 {
-    public class EventRecorder
+    internal class EventRecorder
     {
         private readonly ClickstreamContext _context;
         private readonly MonoBehaviour _mono;
@@ -14,6 +15,16 @@ namespace ClickstreamAnalytics.Provider
         {
             _context = context;
             _mono = mono;
+        }
+
+        public void RecordEvents(Dictionary<string, object> eventDictionary)
+        {
+            var eventJson = ClickstreamJson.Serialize(eventDictionary);
+            var saveResult = ClickstreamEventStorage.SaveEvent(eventJson);
+            ClickstreamLog.Debug(eventJson);
+            if (saveResult) return;
+            ClickstreamLog.Info("Cache Capacity Reached, Sending Event Immediately");
+            StartSendEvents(Event.Constants.Prefix + eventJson + Event.Constants.Suffix);
         }
 
         public void FlushEvents()

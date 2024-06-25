@@ -1,14 +1,28 @@
+using ClickstreamAnalytics.Storage;
+
 namespace ClickstreamAnalytics.Provider
 {
-    public class ClickstreamContext
+    internal class ClickstreamContext
     {
-        public ClickstreamConfiguration Configuration { get; set; }
-        public string UserUniqueId { get; set; }
+        private const string UserUniqueIDKey = ClickstreamPrefs.KeyPrefix + "userUniqueId";
+        public ClickstreamConfiguration Configuration { get; }
+        public string UserUniqueId { get; }
+        public DeviceInfo DeviceInfo { get; }
 
         public ClickstreamContext(ClickstreamConfiguration configuration)
         {
             Configuration = configuration;
-            UserUniqueId = System.Guid.NewGuid().ToString();
+            UserUniqueId = GetUserUniqueId();
+            DeviceInfo = new DeviceInfo();
+        }
+
+        private string GetUserUniqueId()
+        {
+            var uniqueId = (string)(ClickstreamPrefs.GetData(UserUniqueIDKey, typeof(string)) ?? "");
+            if (uniqueId != "") return uniqueId;
+            uniqueId = System.Guid.NewGuid().ToString();
+            ClickstreamPrefs.SaveData(UserUniqueIDKey, uniqueId);
+            return uniqueId;
         }
     }
 }

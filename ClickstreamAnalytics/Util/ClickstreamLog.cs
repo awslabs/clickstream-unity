@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ClickstreamAnalytics.Util
 {
-    public static class ClickstreamLog
+    internal static class ClickstreamLog
     {
         private static bool _enableLog;
 
@@ -16,7 +16,6 @@ namespace ClickstreamAnalytics.Util
         {
             return _enableLog;
         }
-
 
         public static void Info(string message)
         {
@@ -33,7 +32,6 @@ namespace ClickstreamAnalytics.Util
                 UnityEngine.Debug.Log("[ClickstreamAnalytics] Debug: " + message);
             }
         }
-
 
         public static void Warn(string message)
         {
