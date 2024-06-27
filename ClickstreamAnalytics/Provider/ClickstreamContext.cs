@@ -16,7 +16,7 @@ namespace ClickstreamAnalytics.Provider
             DeviceInfo = new DeviceInfo();
         }
 
-        private string GetUserUniqueId()
+        private static string GetUserUniqueId()
         {
             var uniqueId = (string)(ClickstreamPrefs.GetData(UserUniqueIDKey, typeof(string)) ?? "");
             if (uniqueId != "") return uniqueId;

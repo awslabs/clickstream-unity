@@ -29,15 +29,13 @@ namespace ClickstreamAnalytics.Provider
 
         public void FlushEvents()
         {
-            ClickstreamLog.Debug("start flush events");
             var events = ClickstreamEventStorage.GetAllEventsJson();
-            if (events.Length > 0)
-            {
-                StartSendEvents(events);
-            }
+            if (events.Length <= 0) return;
+            ClickstreamLog.Debug("start flush events");
+            StartSendEvents(events);
         }
 
-        public void StartSendEvents(string events)
+        private void StartSendEvents(string events)
         {
             _mono.StartCoroutine(NetRequest.SendRequest(events, _context, HandleWebRequestResult));
         }

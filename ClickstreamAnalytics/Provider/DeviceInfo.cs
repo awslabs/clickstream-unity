@@ -70,7 +70,6 @@ namespace ClickstreamAnalytics.Provider
             return (int)offset.TotalMilliseconds;
         }
 
-
         private static string GetLocale()
         {
             var currentCulture = CultureInfo.CurrentCulture;

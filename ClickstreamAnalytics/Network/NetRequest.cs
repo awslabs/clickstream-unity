@@ -17,6 +17,7 @@ namespace ClickstreamAnalytics.Network
             Action<bool, string> callback)
         {
             var content = eventJson;
+            ClickstreamLog.Debug("start send request:\n" + content);
             var compression = "";
             if (context.Configuration.IsCompressEvents)
             {

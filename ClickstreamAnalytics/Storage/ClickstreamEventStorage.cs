@@ -43,14 +43,14 @@ namespace ClickstreamAnalytics.Storage
 
         public static void ClearEvents(string eventsJson)
         {
-            var allEvents = GetAllEventsJson();
-            if (eventsJson.Length == allEvents.Length)
+            var allEvents = GetAllEvents();
+            if (eventsJson.Length == allEvents.Length + 1)
             {
                 ClickstreamPrefs.ClearData(EventKey);
             }
-            else if (eventsJson.Length < allEvents.Length)
+            else
             {
-                var newEvents = allEvents[(eventsJson.Length + 1)..];
+                var newEvents = Event.Constants.Prefix + allEvents[(eventsJson.Length)..];
                 ClickstreamPrefs.SaveData(EventKey, newEvents);
             }
         }

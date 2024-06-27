@@ -38,7 +38,7 @@ namespace ClickstreamAnalytics.Provider
                 { "device_id", deviceInfo.DeviceId },
                 { "unique_id", context.UserUniqueId },
                 { "app_id", context.Configuration.AppId },
-                { "time_stamp", timestamp },
+                { "timestamp", timestamp },
                 { "platform", deviceInfo.Platform },
                 { "os_version", deviceInfo.OSVersion },
                 { "make", deviceInfo.Manufacture },
