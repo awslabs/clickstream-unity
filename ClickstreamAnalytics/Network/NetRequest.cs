@@ -14,7 +14,9 @@ namespace ClickstreamAnalytics.Network
         public static IEnumerator SendRequest(
             string eventJson,
             ClickstreamContext context,
-            Action<bool, string> callback)
+            int bundleSequenceId,
+            SendType sendType,
+            Action<bool, string, string, SendType> callback)
         {
             var content = eventJson;
             ClickstreamLog.Debug("start send request:\n" + content);
@@ -32,7 +34,7 @@ namespace ClickstreamAnalytics.Network
             var appId = context.Configuration.AppId;
 
             var url =
-                $"{endpoint}?platform=Unity&appId={appId}&event_bundle_sequence_id={1}&compression={compression}&upload_timestamp={timestamp}";
+                $"{endpoint}?platform=Unity&appId={appId}&event_bundle_sequence_id={bundleSequenceId}&compression={compression}&upload_timestamp={timestamp}";
 
             using var webRequest = new UnityWebRequest(url, "POST");
             webRequest.timeout = RequestTimeoutSeconds;
@@ -40,17 +42,9 @@ namespace ClickstreamAnalytics.Network
             webRequest.uploadHandler = new UploadHandlerRaw(bodyRaw);
             webRequest.downloadHandler = new DownloadHandlerBuffer();
 
-
             yield return webRequest.SendWebRequest();
             var responseCode = webRequest.responseCode;
-            if (responseCode == 200)
-            {
-                callback(true, eventJson);
-            }
-            else
-            {
-                callback(false, webRequest.error);
-            }
+            callback(responseCode == 200, eventJson, webRequest.error, sendType);
         }
     }
 }

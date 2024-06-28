@@ -8,7 +8,6 @@ namespace ClickstreamAnalytics.Provider
 {
     internal class DeviceInfo
     {
-        private const string DeviceIDKey = ClickstreamPrefs.KeyPrefix + "deviceId";
         public string DeviceId { get; } = GetDeviceId();
         public int ScreenWidth { get; } = Screen.currentResolution.width;
         public int ScreenHeight { get; } = Screen.currentResolution.height;
@@ -23,7 +22,7 @@ namespace ClickstreamAnalytics.Provider
 
         private static string GetDeviceId()
         {
-            var deviceId = (string)(ClickstreamPrefs.GetData(DeviceIDKey, typeof(string)) ?? "");
+            var deviceId = (string)(ClickstreamPrefs.GetData(ClickstreamPrefs.DeviceIDKey, typeof(string)) ?? "");
             if (deviceId != "") return deviceId;
 #if (UNITY_WEBGL)
             deviceId = Guid.NewGuid().ToString();
@@ -34,7 +33,7 @@ namespace ClickstreamAnalytics.Provider
                 deviceId = Guid.NewGuid().ToString();
             }
 #endif
-            ClickstreamPrefs.SaveData(DeviceIDKey, deviceId);
+            ClickstreamPrefs.SaveData(ClickstreamPrefs.DeviceIDKey, deviceId);
             return deviceId;
         }
 

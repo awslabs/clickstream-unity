@@ -5,7 +5,14 @@ namespace ClickstreamAnalytics.Storage
 {
     internal static class ClickstreamPrefs
     {
-        public const string KeyPrefix = "aws-solution/clickstream-unity/";
+        private const string KeyPrefix = "aws-solution/clickstream-unity/";
+        public const string DeviceIDKey = KeyPrefix + "deviceIdKey";
+        public const string UserUniqueIDKey = KeyPrefix + "userUniqueIdKey";
+        public const string BundleSequenceIdKey = KeyPrefix + "bundleSequenceIdKey";
+        public const string EventsKey = KeyPrefix + "eventsKey";
+        public const string FailedEventsKey = KeyPrefix + "failedEventsKey";
+        public const string UserIdMappingKey = KeyPrefix + "userIdMappingKey";
+        public const string UserAttributesKey = KeyPrefix + "userAttributesKey";
 
         public static void SaveData(string key, object value)
         {

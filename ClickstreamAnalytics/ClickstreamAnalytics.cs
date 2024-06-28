@@ -21,12 +21,18 @@ namespace ClickstreamAnalytics
             _provider = (ClickstreamProvider)mThinkingSDKAutoTrack.GetComponent(typeof(ClickstreamProvider));
             _provider.Configure(configuration);
             Object.DontDestroyOnLoad(mThinkingSDKAutoTrack);
+            ClickstreamLog.Debug("Clickstream SDK initialized successful, configuration is : " + configuration);
             return true;
         }
 
         public static void Record(string name, Dictionary<string, object> attributes = null)
         {
             _provider.Record(name, attributes);
+        }
+
+        public static void SetUserId(string userId)
+        {
+            _provider.SetUserId(userId);
         }
 
         public static void SetUserAttributes(Dictionary<string, object> userAttributes)
