@@ -5,7 +5,6 @@ using ClickstreamAnalytics.Util;
 using UnityEngine;
 using UnityEditor.PackageManager;
 
-
 namespace ClickstreamAnalytics.Provider
 {
     internal static class EventBuilder
@@ -24,11 +23,8 @@ namespace ClickstreamAnalytics.Provider
         )
         {
             var deviceInfo = context.DeviceInfo;
-            attributes ??= new Dictionary<string, object>();
-            foreach (var kvp in globalAttributes)
-            {
-                attributes[kvp.Key] = kvp.Value;
-            }
+
+            var eventAttributes = GetEventAttributesWithCheck(attributes, globalAttributes);
 
             var timestamp = ClickstreamDate.GetCurrentTimestamp();
             var eventDictionary = new Dictionary<string, object>
@@ -55,7 +51,7 @@ namespace ClickstreamAnalytics.Provider
                 { "app_package_name", AppPackageName },
                 { "app_version", AppVersion },
                 { "user", userAttributes },
-                { "attributes", attributes }
+                { "attributes", eventAttributes }
             };
             return eventDictionary;
         }
@@ -68,6 +64,41 @@ namespace ClickstreamAnalytics.Provider
                 .Select(PackageInfo.FindForAssetPath)
                 .Where(x => x != null)
                 .First(x => x.name == PackageName).version;
+        }
+
+        private static Dictionary<string, object> GetEventAttributesWithCheck(
+            Dictionary<string, object> eventAttributes,
+            Dictionary<string, object> globalAttributes)
+        {
+            var customAttributes = new Dictionary<string, object>();
+            var globalAttributesCount = globalAttributes?.Count ?? 0;
+
+            if (eventAttributes is { Count: > 0 })
+            {
+                foreach (var (key, value) in eventAttributes)
+                {
+                    if (value == null) continue;
+                    var currentNumber = customAttributes.Count + globalAttributesCount;
+                    var result = EventChecker.CheckAttributes(currentNumber, key, value);
+                    if (result.ErrorCode > 0)
+                    {
+                        customAttributes[Event.Attr.ErrorCodeKey] = result.ErrorCode;
+                        customAttributes[Event.Attr.ErrorMessageKey] = result.ErrorMessage;
+                    }
+                    else
+                    {
+                        customAttributes[key] = value;
+                    }
+                }
+            }
+
+            if (globalAttributes == null) return customAttributes;
+            foreach (var kvp in globalAttributes.Where(kvp => !customAttributes.ContainsKey(kvp.Key)))
+            {
+                customAttributes[kvp.Key] = kvp.Value;
+            }
+
+            return customAttributes;
         }
     }
 }

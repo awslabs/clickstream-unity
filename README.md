@@ -25,7 +25,7 @@ using ClickstreamAnalytics;
 
 ClickstreamAnalytics.Init(new ClickstreamConfiguration
 {
-    AppId = "shop",
+    AppId = "your AppId",
     Endpoint = "https://example.com/collect"
 });
 ```
@@ -46,7 +46,119 @@ var attributes = new Dictionary<string, object>()
 ClickstreamAnalytics.Record("button_click", attributes);
 
 // record event with name
-ClickstreamAnalytics.Record({ name: 'button_click' });
+ClickstreamAnalytics.Record('button_click');
+```
+
+#### Login and logout
+
+```c#
+using ClickstreamAnalytics;
+
+// when user login success.
+ClickstreamAnalytics.SetUserId("UserId");
+
+// when user logout
+ClickstreamAnalytics.SetUserId(null);
+```
+
+#### Add user attribute
+
+```c#
+using ClickstreamAnalytics;
+
+var userAttrs = new Dictionary<string, object> {
+    { "userName", "carl" },
+    { "userAge", 22 }
+};
+ClickstreamAnalytics.SetUserAttributes(userAttrs);
+```
+
+When opening for the first time after integrating the SDK, you need to manually set the user attributes once, and current login user's attributes will be cached in PlayerPrefs, so the next time game start you don't need to set all user's attribute again, of course you can use the same api `ClickstreamAnalytics.SetUserAttributes()` to update the current user's attribute when it changes.
+
+#### Add global attribute
+
+1. Add global attributes when initializing the SDK
+
+   The following example code shows how to add global attributes when initializing the SDK.
+
+   ```c#
+   using ClickstreamAnalytics;
+   
+   ClickstreamAnalytics.Init(new ClickstreamConfiguration
+   {
+       AppId = "your AppId",
+       Endpoint = "https://example.com/collect",
+       GlobalAttributes = new Dictionary<string, object>
+       {
+           { "_app_install_channel", "Amazon Store" }
+       }
+   });
+   ```
+
+2. Add global attributes after initializing the SDK
+
+   ```c#
+   using ClickstreamAnalytics;
+   
+   ClickstreamAnalytics.SetGlobalAttributes(new Dictionary<string, object>
+   {
+       { "_traffic_source_source", "Search engine" }, { "level", 10 }
+   });
+   ```
+
+It is recommended to set global attributes when initializing the SDK, global attributes will be included in all events that occur after it is set, you also can remove a global attribute by setting its value to `null`.
+
+#### Other configurations
+
+In addition to the required `AppId` and `Endpoint`, you can configure other information to get more customized usage:
+
+```c#
+using ClickstreamAnalytics;
+
+ClickstreamAnalytics.Init(new ClickstreamConfiguration
+{
+    AppId = "your AppId",
+    Endpoint = "https://example.com/collect",
+    SendEventsInterval = 10000,
+    IsCompressEvents = true,
+    IsLogEvents = false,
+    IsTrackAppStartEvents = true,
+    IsTrackAppEndEvents = true,
+    IsTrackSceneLoadEvents = true,
+    IsTrackSceneUnLoadEvents = true
+});
+```
+
+Here is an explanation of each property:
+
+- **AppId (Required)**: the app id of your project in control plane.
+- **Endpoint (Required)**: the endpoint path you will upload the event to AWS server.
+- **SendEventsInterval**: event sending interval millisecond, works only bath send mode, the default value is `10000`
+- **IsLogEvents**: whether to print out event json for debugging, default is false.
+- **IsTrackAppStartEvents**: whether auto record app start events when game becomes visible, default is `true`
+- **IsTrackAppEndEvents**: whether auto record app end events when game becomes invisible, default is `true`
+- **IsTrackSceneLoadEvents**: whether auto record scene load events, default is `true`
+- **IsTrackSceneUnLoadEvents**: whether auto record scene unload events, default is `true`
+- **authCookie**: your auth cookie for AWS application load balancer auth cookie.
+
+#### Configuration update
+
+You can update the default configuration after initializing the SDK, below are the additional configuration options you can customize.
+
+```c#
+using ClickstreamAnalytics;
+
+ClickstreamAnalytics.UpdateConfiguration(new Configuration
+{
+    AppId = "your AppId",
+    Endpoint = "https://example.com/collect",
+    IsCompressEvents = false,
+    IsLogEvents = true,
+    IsTrackAppStartEvents = false,
+    IsTrackAppEndEvents = false,
+    IsTrackSceneLoadEvents = false,
+    IsTrackSceneUnLoadEvents = false
+});
 ```
 
 ## Security

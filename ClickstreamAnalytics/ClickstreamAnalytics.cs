@@ -17,11 +17,17 @@ namespace ClickstreamAnalytics
                 return false;
             }
 
-            var mThinkingSDKAutoTrack = new GameObject("ClickstreamProvider", typeof(ClickstreamProvider));
-            _provider = (ClickstreamProvider)mThinkingSDKAutoTrack.GetComponent(typeof(ClickstreamProvider));
+            if (string.IsNullOrEmpty(configuration.AppId) || string.IsNullOrEmpty(configuration.Endpoint))
+            {
+                ClickstreamLog.Warn("Clickstream SDK initialization failed, AppId or Endpoint not configured");
+                return false;
+            }
+
+            var mProviderAutoTrack = new GameObject("ClickstreamProvider", typeof(ClickstreamProvider));
+            _provider = (ClickstreamProvider)mProviderAutoTrack.GetComponent(typeof(ClickstreamProvider));
             _provider.Configure(configuration);
-            Object.DontDestroyOnLoad(mThinkingSDKAutoTrack);
-            ClickstreamLog.Debug("Clickstream SDK initialized successful, configuration is : " + configuration);
+            Object.DontDestroyOnLoad(mProviderAutoTrack);
+            ClickstreamLog.Debug("Clickstream SDK initialized successful with configuration:\n" + configuration);
             return true;
         }
 
@@ -45,10 +51,27 @@ namespace ClickstreamAnalytics
             _provider.SetGlobalAttributes(globalAttributes);
         }
 
+        public static void UpdateConfiguration(Configuration configuration)
+        {
+            _provider.UpdateConfiguration(configuration);
+        }
+
         public static void FlushEvents()
         {
             _provider.FlushEvents();
         }
+    }
+
+    public class Configuration
+    {
+        public string AppId { get; set; }
+        public string Endpoint { get; set; }
+        public bool? IsLogEvents { get; set; }
+        public bool? IsTrackAppStartEvents { get; set; }
+        public bool? IsTrackAppEndEvents { get; set; }
+        public bool? IsTrackSceneLoadEvents { get; set; }
+        public bool? IsTrackSceneUnLoadEvents { get; set; }
+        public bool? IsCompressEvents { get; set; }
     }
 
     public class ClickstreamConfiguration
@@ -56,7 +79,27 @@ namespace ClickstreamAnalytics
         public string AppId { get; set; }
         public string Endpoint { get; set; }
         public bool IsLogEvents { get; set; }
-        public bool IsCompressEvents { get; set; } = true;
-        public int SendEventsInterval { get; set; } = 5000;
+        public bool IsTrackAppStartEvents { get; set; }
+        public bool IsTrackAppEndEvents { get; set; }
+        public bool IsTrackSceneLoadEvents { get; set; }
+        public bool IsTrackSceneUnLoadEvents { get; set; }
+        public bool IsCompressEvents { get; set; }
+        public int SendEventsInterval { get; set; } = 10000;
+
+        public Dictionary<string, object> GlobalAttributes { get; set; }
+
+        public override string ToString()
+        {
+            return
+                $"AppId: {AppId},\n" +
+                $"Endpoint: {Endpoint},\n" +
+                $"IsLogEvents: {IsLogEvents},\n" +
+                $"IsTrackAppStartEvents: {IsTrackAppStartEvents},\n" +
+                $"IsTrackAppEndEvents: {IsTrackAppEndEvents},\n" +
+                $"IsTrackSceneLoadEvents: {IsTrackSceneLoadEvents},\n" +
+                $"IsTrackSceneUnLoadEvents: {IsTrackSceneUnLoadEvents},\n" +
+                $"IsCompressEvents: {IsCompressEvents},\n" +
+                $"SendEventsInterval: {SendEventsInterval}\n";
+        }
     }
 }

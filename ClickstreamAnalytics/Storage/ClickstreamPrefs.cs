@@ -13,6 +13,7 @@ namespace ClickstreamAnalytics.Storage
         public const string FailedEventsKey = KeyPrefix + "failedEventsKey";
         public const string UserIdMappingKey = KeyPrefix + "userIdMappingKey";
         public const string UserAttributesKey = KeyPrefix + "userAttributesKey";
+        public const string IsFirstOpenKey = KeyPrefix + "isFirstOpenKey";
 
         public static void SaveData(string key, object value)
         {

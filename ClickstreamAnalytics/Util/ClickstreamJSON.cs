@@ -13,11 +13,6 @@ using System.IO;
 
 namespace ClickstreamAnalytics.Util
 {
-    /* Based on the JSON parser from
-     *
-     * I simplified it so that it doesn't throw exceptions
-     * and can be used in Unity iPhone with maximum code stripping.
-     */
     /// <summary>
     /// This class encodes and decodes JSON strings.
     /// Spec. details, see http://www.json.org/
@@ -100,6 +95,15 @@ namespace ClickstreamAnalytics.Util
                             continue;
                         case Token.CurlyClose:
                             return table;
+                        case Token.CurlyOpen:
+                        case Token.SquaredOpen:
+                        case Token.SquaredClose:
+                        case Token.Colon:
+                        case Token.String:
+                        case Token.Number:
+                        case Token.True:
+                        case Token.False:
+                        case Token.Null:
                         default:
                             // name
                             var name = ParseString();
@@ -552,9 +556,6 @@ namespace ClickstreamAnalytics.Util
             {
                 switch (value)
                 {
-                    // NOTE: decimals lose precision during serialization.
-                    // They always have, I'm just letting you know.
-                    // Previously floats and doubles lost precision too.
                     case float f:
                         _builder.Append(f.ToString("R", CultureInfo.InvariantCulture));
                         break;
