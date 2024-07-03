@@ -45,6 +45,11 @@ namespace ClickstreamAnalytics.Provider
                 RuntimePlatform.IPhonePlayer => "iOS",
                 RuntimePlatform.OSXPlayer or RuntimePlatform.OSXEditor => "Mac",
                 RuntimePlatform.WindowsPlayer or RuntimePlatform.WindowsEditor => "Windows",
+                RuntimePlatform.PS4 => "PS4",
+                RuntimePlatform.PS5 => "PS5",
+                RuntimePlatform.Switch => "Switch",
+                RuntimePlatform.VisionOS => "VisionOS",
+                RuntimePlatform.XboxOne => "Xbox",
                 RuntimePlatform.LinuxPlayer => "Linux",
                 _ => "UNKNOWN"
             };

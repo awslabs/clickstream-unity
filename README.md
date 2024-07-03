@@ -4,7 +4,7 @@
 
 Clickstream Unity SDK can help you easily collect and report events from Unity Games to AWS. This SDK is part of an AWS solution - [Clickstream Analytics on AWS](https://github.com/awslabs/clickstream-analytics-on-aws), which provisions data pipeline to ingest and process event data into AWS services such as S3, Redshift.
 
-The SDK provide easy to use API for data collection. In addition, we've added features that automatically collect common user events and attributes (e.g., page view, first open) to simplify data collection for users.
+The SDK provide easy to use API for data collection. In addition, we've added features that automatically collect common user events and attributes (e.g., app start and scene load) to simplify data collection for users.
 
 Visit our [Documentation site](https://awslabs.github.io/clickstream-analytics-on-aws/en/latest/sdk-manual/unity/) to learn more about Clickstream Unity SDK.
 
@@ -37,7 +37,7 @@ ClickstreamAnalytics.Init(new ClickstreamConfiguration
 ```c#
 using ClickstreamAnalytics;
 
-var attributes = new Dictionary<string, object>()
+var attributes = new Dictionary<string, object>
 {
     { "event_category", "shoes" },
     { "currency", "CNY" },
@@ -160,6 +160,15 @@ ClickstreamAnalytics.UpdateConfiguration(new Configuration
     IsTrackSceneUnLoadEvents = false
 });
 ```
+
+#### Debug events
+
+You can follow the steps below to view the event raw json and debug your events.
+
+1. Using `ClickstreamAnalytics.Init()` API and set the `IsLogEvents` attribute to true in debug mode.
+2. Integrate the SDK and start your game in Unity Editor, then open the **Console** tab.
+3. Input `[ClickstreamAnalytics]` in the filter, and you will see the json content of all events recorded by Clickstream Unity SDK.
+
 
 ## Security
 
