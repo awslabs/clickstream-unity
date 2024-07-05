@@ -58,12 +58,13 @@ namespace ClickstreamAnalytics.Provider
 
         private static string GetSDKVersion()
         {
-            return UnityEditor.AssetDatabase.FindAssets("package")
+            var package =  UnityEditor.AssetDatabase.FindAssets("package")
                 .Select(UnityEditor.AssetDatabase.GUIDToAssetPath)
                 .Where(x => UnityEditor.AssetDatabase.LoadAssetAtPath<TextAsset>(x) != null)
                 .Select(PackageInfo.FindForAssetPath)
                 .Where(x => x != null)
-                .First(x => x.name == PackageName).version;
+                .FirstOrDefault(x => x.name == PackageName);
+            return package == null ? "" : package.version;
         }
 
         private static Dictionary<string, object> GetEventAttributesWithCheck(
