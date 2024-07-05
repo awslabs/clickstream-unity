@@ -6,8 +6,8 @@ namespace ClickstreamAnalytics.Tests
 {
     public class ClickstreamTests
     {
-        [SetUp]
-        public void SetUp()
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
             ClickstreamAnalytics.Init(new ClickstreamConfiguration
             {
