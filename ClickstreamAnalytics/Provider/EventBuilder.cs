@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using ClickstreamAnalytics.Util;
 using UnityEngine;
-using UnityEditor.PackageManager;
 
 namespace ClickstreamAnalytics.Provider
 {
     internal static class EventBuilder
     {
-        private const string PackageName = "software.aws.clickstream";
         private static readonly string AppVersion = Application.version;
         private static readonly string AppPackageName = Application.identifier;
-        private static readonly string SDKVersion = GetSDKVersion();
-
+        private const string SDKVersion = "0.1.0";
         public static Dictionary<string, object> CreatedEvent(
             ClickstreamContext context,
             string eventName,
@@ -54,17 +51,6 @@ namespace ClickstreamAnalytics.Provider
                 { "attributes", eventAttributes }
             };
             return eventDictionary;
-        }
-
-        private static string GetSDKVersion()
-        {
-            var package =  UnityEditor.AssetDatabase.FindAssets("package")
-                .Select(UnityEditor.AssetDatabase.GUIDToAssetPath)
-                .Where(x => UnityEditor.AssetDatabase.LoadAssetAtPath<TextAsset>(x) != null)
-                .Select(PackageInfo.FindForAssetPath)
-                .Where(x => x != null)
-                .FirstOrDefault(x => x.name == PackageName);
-            return package == null ? "" : package.version;
         }
 
         private static Dictionary<string, object> GetEventAttributesWithCheck(

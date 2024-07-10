@@ -1,7 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using UnityEngine;
-
-namespace ClickstreamAnalytics.Util
+﻿namespace ClickstreamAnalytics.Util
 {
     internal static class ClickstreamLog
     {
@@ -10,11 +7,6 @@ namespace ClickstreamAnalytics.Util
         public static void EnableLog(bool enabled)
         {
             _enableLog = enabled;
-        }
-
-        public static bool GetEnable()
-        {
-            return _enableLog;
         }
 
         public static void Info(string message)
