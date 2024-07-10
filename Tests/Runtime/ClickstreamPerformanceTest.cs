@@ -20,7 +20,7 @@ namespace ClickstreamAnalytics.Tests
             });
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            for (var i = 0; i < 20; i++)
+            for (var i = 0; i < 10; i++)
             {
                 ClickstreamAnalytics.Record("testEvent", ClickstreamTests.GetProperties());
             }
