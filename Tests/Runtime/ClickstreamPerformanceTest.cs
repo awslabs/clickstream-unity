@@ -27,7 +27,7 @@ namespace ClickstreamAnalytics.Tests
 
             stopwatch.Stop();
             var elapsedMilliseconds = (stopwatch.ElapsedTicks / (double)Stopwatch.Frequency) * 1000;
-            UnityEngine.Debug.Log("Save 100 events cost: " + elapsedMilliseconds + " ms");
+            UnityEngine.Debug.Log("Save 10 events cost: " + elapsedMilliseconds + " ms");
             Assert.True(elapsedMilliseconds < 16);
         }
         
