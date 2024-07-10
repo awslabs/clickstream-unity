@@ -7,12 +7,14 @@ namespace ClickstreamAnalytics.Storage
     internal static class ClickstreamEventStorage
     {
         private const int MaxLength = 1024 * 1024;
+        private static readonly StringBuilder MemoryEventBuilder = new();
+        private static int _currentMemoryByteCount;
 
         public static bool SaveEvent(string eventJson)
         {
             var allEvents = GetAllEvents();
-            var allByteCount = Encoding.UTF8.GetByteCount(eventJson) + Encoding.UTF8.GetByteCount(allEvents);
-            if (allByteCount > MaxLength)
+            var allByteCount = Encoding.UTF8.GetByteCount(eventJson) + Encoding.UTF8.GetByteCount(allEvents) + 1;
+            if (allByteCount >= MaxLength)
             {
                 return false;
             }
@@ -29,6 +31,29 @@ namespace ClickstreamAnalytics.Storage
             return true;
         }
 
+        public static bool SaveEventInMemory(string eventJson)
+        {
+            var allByteCount = Encoding.UTF8.GetByteCount(eventJson) + 1;
+            if (allByteCount + _currentMemoryByteCount >= MaxLength)
+            {
+                return false;
+            }
+
+            if (MemoryEventBuilder.Length > 0)
+            {
+                MemoryEventBuilder.Append(',');
+                MemoryEventBuilder.Append(eventJson);
+            }
+            else
+            {
+                MemoryEventBuilder.Append(Event.Constants.Prefix);
+                MemoryEventBuilder.Append(eventJson);
+            }
+
+            _currentMemoryByteCount += allByteCount + 1;
+            return true;
+        }
+
         private static string GetAllEvents()
         {
             var events = ClickstreamPrefs.GetData(ClickstreamPrefs.EventsKey, typeof(string)) ?? "";
@@ -37,6 +62,11 @@ namespace ClickstreamAnalytics.Storage
 
         public static string GetAllEventsJson()
         {
+            if (MemoryEventBuilder.Length > 0)
+            {
+                return MemoryEventBuilder + Event.Constants.Suffix;
+            }
+
             var events = GetAllEvents();
             return events.Length > 0 ? events + Event.Constants.Suffix : "";
         }
@@ -55,12 +85,36 @@ namespace ClickstreamAnalytics.Storage
             }
         }
 
+        public static void ClearMemoryEvents(string eventsJson)
+        {
+            if (eventsJson.Length == MemoryEventBuilder.Length + 1)
+            {
+                MemoryEventBuilder.Clear();
+                _currentMemoryByteCount = 0;
+            }
+            else
+            {
+                var allEvents = MemoryEventBuilder.ToString();
+                var newEvents = Event.Constants.Prefix + allEvents[(eventsJson.Length)..];
+                MemoryEventBuilder.Clear();
+                MemoryEventBuilder.Append(newEvents);
+                _currentMemoryByteCount = Encoding.UTF8.GetByteCount(newEvents);
+            }
+        }
+
+        public static void SaveUnsentMemoryEvents()
+        {
+            if (MemoryEventBuilder.Length <= 0) return;
+            SaveFailedEvents(MemoryEventBuilder + Event.Constants.Suffix);
+            _currentMemoryByteCount = 0;
+        }
+
         public static void SaveFailedEvents(string failedEventsJson)
         {
             var eventJson = failedEventsJson.Substring(1, failedEventsJson.Length - 2);
             var allEvents = GetAllFailedEvents();
-            var allByteCount = Encoding.UTF8.GetByteCount(eventJson) + Encoding.UTF8.GetByteCount(allEvents);
-            if (allByteCount > MaxLength)
+            var allByteCount = Encoding.UTF8.GetByteCount(eventJson) + Encoding.UTF8.GetByteCount(allEvents) + 1;
+            if (allByteCount >= MaxLength)
             {
                 ClickstreamLog.Warn("No space to cache the failed events, and the failed events will be discarded");
                 return;

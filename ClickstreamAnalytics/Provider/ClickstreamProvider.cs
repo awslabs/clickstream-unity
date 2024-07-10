@@ -236,12 +236,14 @@ namespace ClickstreamAnalytics.Provider
             if (!shouldRecord) return;
             if (hasFocus && _isEnded)
             {
+                _context.DeviceInfo.UpdateNetworkType();
                 Record(Event.PresetEvents.AppStart);
             }
             else
             {
                 Record(Event.PresetEvents.AppEnd);
                 _isEnded = true;
+                FlushEvents();
             }
         }
 
@@ -251,6 +253,8 @@ namespace ClickstreamAnalytics.Provider
             {
                 OnApplicationFocus(false);
             }
+
+            ClickstreamEventStorage.SaveUnsentMemoryEvents();
         }
 
         private void SetUpAutoTrack()

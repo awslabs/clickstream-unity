@@ -19,6 +19,7 @@ namespace ClickstreamAnalytics.Provider
         public string Locale { get; } = GetLocale();
         public string Country { get; } = GetCountry();
         public string Language { get; } = GetLanguage();
+        public string NetWorkType { get; private set; } = GetNetworkType();
 
         private static string GetDeviceId()
         {
@@ -56,7 +57,7 @@ namespace ClickstreamAnalytics.Provider
             return platform;
         }
 
-        public static string NetworkType()
+        private static string GetNetworkType()
         {
             var networkType = Application.internetReachability switch
             {
@@ -65,6 +66,11 @@ namespace ClickstreamAnalytics.Provider
                 _ => "UNKNOWN"
             };
             return networkType;
+        }
+
+        public void UpdateNetworkType()
+        {
+            NetWorkType = GetNetworkType();
         }
 
         private static int GetZoneOffsite()

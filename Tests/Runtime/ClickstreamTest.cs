@@ -42,23 +42,7 @@ namespace ClickstreamAnalytics.Tests
         [Test]
         public void TestRecordEventWithAllAttributesType()
         {
-            var properties = new Dictionary<string, object>
-            {
-                { "product_name", "shoes" },
-                { "quantity", 42 },
-                { "order_number", 123456U },
-                { "rating", (byte)5 },
-                { "temperature", (sbyte)-10 },
-                { "discount", (short)-200 },
-                { "item_count", (ushort)1000 },
-                { "big_number", 9876543210L },
-                { "huge_number", 12345678901234567890UL },
-                { "price", 19.99f },
-                { "pi", 3.141592653589793 },
-                { "tax_rate", 0.075m },
-                { "in_stock", true }
-            };
-            ClickstreamAnalytics.Record("testEvent", properties);
+            ClickstreamAnalytics.Record("testEvent", GetProperties());
         }
 
 
@@ -98,6 +82,26 @@ namespace ClickstreamAnalytics.Tests
         public void TestFlushEvents()
         {
             ClickstreamAnalytics.FlushEvents();
+        }
+
+        public static Dictionary<string, object> GetProperties()
+        {
+            return new Dictionary<string, object>
+            {
+                { "product_name", "shoes" },
+                { "quantity", 42 },
+                { "order_number", 123456U },
+                { "rating", (byte)5 },
+                { "temperature", (sbyte)-10 },
+                { "discount", (short)-200 },
+                { "item_count", (ushort)1000 },
+                { "big_number", 9876543210L },
+                { "huge_number", 12345678901234567890UL },
+                { "price", 19.99f },
+                { "pi", 3.141592653589793 },
+                { "tax_rate", 0.075m },
+                { "in_stock", true }
+            };
         }
     }
 }

@@ -23,7 +23,10 @@ namespace ClickstreamAnalytics.Provider
         public void RecordEvents(Dictionary<string, object> eventDictionary)
         {
             var eventJson = ClickstreamJson.Serialize(eventDictionary);
-            var saveResult = ClickstreamEventStorage.SaveEvent(eventJson);
+            var saveResult = _context.Configuration.IsUseMemoryCache
+                ? ClickstreamEventStorage.SaveEventInMemory(eventJson)
+                : ClickstreamEventStorage.SaveEvent(eventJson);
+
             ClickstreamLog.Debug(eventJson);
             if (saveResult) return;
             ClickstreamLog.Info("Cache capacity reached, sending events immediately");
@@ -61,7 +64,15 @@ namespace ClickstreamAnalytics.Provider
                 case SendType.Normal:
                     if (success)
                     {
-                        ClickstreamEventStorage.ClearEvents(eventsJson);
+                        if (_context.Configuration.IsUseMemoryCache)
+                        {
+                            ClickstreamEventStorage.ClearMemoryEvents(eventsJson);
+                        }
+                        else
+                        {
+                            ClickstreamEventStorage.ClearEvents(eventsJson);
+                        }
+
                         ClickstreamLog.Debug("Send events successful!");
                         if (_haveFailedEvents)
                         {

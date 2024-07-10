@@ -122,6 +122,7 @@ ClickstreamAnalytics.Init(new ClickstreamConfiguration
     SendEventsInterval = 10000,
     IsCompressEvents = true,
     IsLogEvents = false,
+    IsUseMemoryCache = false,
     IsTrackAppStartEvents = true,
     IsTrackAppEndEvents = true,
     IsTrackSceneLoadEvents = true,
@@ -135,11 +136,11 @@ Here is an explanation of each property:
 - **Endpoint (Required)**: the endpoint path you will upload the event to AWS server.
 - **SendEventsInterval**: event sending interval millisecond, works only bath send mode, the default value is `10000`
 - **IsLogEvents**: whether to print out event json for debugging, default is false.
+- **IsUseMemoryCache**: whether to use memory to cache events for better performance, default is false.
 - **IsTrackAppStartEvents**: whether auto record app start events when game becomes visible, default is `true`
 - **IsTrackAppEndEvents**: whether auto record app end events when game becomes invisible, default is `true`
 - **IsTrackSceneLoadEvents**: whether auto record scene load events, default is `true`
 - **IsTrackSceneUnLoadEvents**: whether auto record scene unload events, default is `true`
-- **authCookie**: your auth cookie for AWS application load balancer auth cookie.
 
 #### Configuration update
 

@@ -85,6 +85,7 @@ namespace ClickstreamAnalytics
         public bool IsTrackSceneUnLoadEvents { get; set; }
         public bool IsCompressEvents { get; set; }
         public int SendEventsInterval { get; set; } = 10000;
+        public bool IsUseMemoryCache { get; set; }
 
         public Dictionary<string, object> GlobalAttributes { get; set; }
 
@@ -99,7 +100,8 @@ namespace ClickstreamAnalytics
                 $"IsTrackSceneLoadEvents: {IsTrackSceneLoadEvents},\n" +
                 $"IsTrackSceneUnLoadEvents: {IsTrackSceneUnLoadEvents},\n" +
                 $"IsCompressEvents: {IsCompressEvents},\n" +
-                $"SendEventsInterval: {SendEventsInterval}\n";
+                $"SendEventsInterval: {SendEventsInterval}\n" +
+                $"IsUseMemoryCache: {IsUseMemoryCache}\n";
         }
     }
 }

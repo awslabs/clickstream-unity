@@ -11,6 +11,7 @@ namespace ClickstreamAnalytics.Provider
         private static readonly string AppVersion = Application.version;
         private static readonly string AppPackageName = Application.identifier;
         private const string SDKVersion = "0.1.0";
+
         public static Dictionary<string, object> CreatedEvent(
             ClickstreamContext context,
             string eventName,
@@ -38,7 +39,7 @@ namespace ClickstreamAnalytics.Provider
                 { "model", deviceInfo.DeviceModel },
                 { "locale", deviceInfo.Locale },
                 { "zone_offset", deviceInfo.ZoneOffset },
-                { "network_type", DeviceInfo.NetworkType() },
+                { "network_type", deviceInfo.NetWorkType },
                 { "screen_width", deviceInfo.ScreenWidth },
                 { "screen_height", deviceInfo.ScreenHeight },
                 { "system_language", deviceInfo.Language },
