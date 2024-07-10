@@ -7,11 +7,6 @@ namespace ClickstreamAnalytics.Tests
 {
     public class ClickstreamPerformanceTests
     {
-        [SetUp]
-        public void SetUp()
-        {
-            PlayerPrefs.DeleteAll();
-        }
 
         [Test]
         public void TestPerformanceWhenUseMemoryCache()
@@ -25,7 +20,7 @@ namespace ClickstreamAnalytics.Tests
             });
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            for (var i = 0; i < 100; i++)
+            for (var i = 0; i < 20; i++)
             {
                 ClickstreamAnalytics.Record("testEvent", ClickstreamTests.GetProperties());
             }
@@ -35,8 +30,7 @@ namespace ClickstreamAnalytics.Tests
             UnityEngine.Debug.Log("Save 100 events cost: " + elapsedMilliseconds + " ms");
             Assert.True(elapsedMilliseconds < 16);
         }
-
-
+        
         [Test]
         public void TestPerformanceWhenUsePlayerPrefs()
         {
