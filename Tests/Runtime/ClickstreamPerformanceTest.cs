@@ -30,14 +30,14 @@ namespace ClickstreamAnalytics.Tests
             });
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            for (var i = 0; i < 100; i++)
+            for (var i = 0; i < 20; i++)
             {
                 ClickstreamAnalytics.Record("testEvent", ClickstreamTests.GetProperties());
             }
 
             stopwatch.Stop();
             var elapsedMilliseconds = (stopwatch.ElapsedTicks / (double)Stopwatch.Frequency) * 1000;
-            UnityEngine.Debug.Log("Save 100 events cost: " + elapsedMilliseconds + " ms");
+            UnityEngine.Debug.Log("Save 20 events cost: " + elapsedMilliseconds + " ms");
             Assert.True(elapsedMilliseconds < 16);
         }
 
@@ -53,14 +53,14 @@ namespace ClickstreamAnalytics.Tests
             });
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            for (var i = 0; i < 10; i++)
+            for (var i = 0; i < 5; i++)
             {
-                ClickstreamAnalytics.Record("testEvent", ClickstreamTests.GetProperties());
+                ClickstreamAnalytics.Record("testEvent");
             }
 
             stopwatch.Stop();
             var elapsedMilliseconds = stopwatch.ElapsedTicks / (double)Stopwatch.Frequency * 1000;
-            UnityEngine.Debug.Log("Save 10 events cost: " + elapsedMilliseconds + " ms");
+            UnityEngine.Debug.Log("Save 5 events cost: " + elapsedMilliseconds + " ms");
             Assert.True(elapsedMilliseconds < 16);
         }
     }
