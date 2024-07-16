@@ -1,9 +1,9 @@
 /*
- * MIT License.  Forked from GA_MiniJSON.
- * I modified it so that it could be used for TD limitations.
+ * MIT License.
+ * Copyright (c) 2013 Calvin Rien Based on the JSON parser by Patrick van Bergen
+ * http://techblog.procurios.nl/k/618/news/view/14605/14863/How-do-I-write-my-own-parser-for-JSON.html
+ * We modified it to meet the data collection of Clickstream Unity SDK
  */
-// using UnityEngine;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
