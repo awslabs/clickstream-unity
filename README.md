@@ -2,11 +2,9 @@
 
 ## Introduction
 
-Clickstream Unity SDK can help you easily collect and report events from Unity Games to AWS. This SDK is part of an AWS solution - [Clickstream Analytics on AWS](https://github.com/awslabs/clickstream-analytics-on-aws), which provisions data pipeline to ingest and process event data into AWS services such as S3, Redshift.
+Clickstream Unity SDK can help you easily collect and report events from Unity Games to AWS. This SDK is part of an AWS solution - [Clickstream Analytics on AWS](https://github.com/aws-solutions/clickstream-analytics-on-aws), which provisions data pipeline to ingest and process event data into AWS services such as S3, Redshift.
 
 The SDK provide easy to use API for data collection. In addition, we've added features that automatically collect common user events and attributes (e.g., app start and scene load) to simplify data collection for users.
-
-Visit our [Documentation site](https://awslabs.github.io/clickstream-analytics-on-aws/en/latest/sdk-manual/unity/) to learn more about Clickstream Unity SDK.
 
 ## Integrate SDK
 
